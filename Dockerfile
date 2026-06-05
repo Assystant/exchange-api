@@ -14,13 +14,9 @@ RUN npm install -g pm2
 
 COPY . .
 
-RUN groupadd --system appgroup \
-    && useradd --system --gid appgroup --create-home --home-dir /home/appuser appuser \
-    && chown -R appuser:appgroup /app /ms-playwright
-
-USER appuser
-ENV HOME=/home/appuser
-
 EXPOSE 4000
 
-CMD ["pm2-runtime", "ecosystem.config.cjs"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
